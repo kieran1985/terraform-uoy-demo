@@ -35,7 +35,7 @@ resource "aws_secretsmanager_secret" "test_db_password_secret" {
 resource "aws_secretsmanager_secret_version" "test_db_password_version" {
   secret_id = aws_secretsmanager_secret.test_db_password_secret.id
   secret_string = jsonencode({
-    username = "admin"
+    username = "test-admin"
     password = random_password.test_db_master_password.result
   })
 }
