@@ -35,7 +35,7 @@ resource "aws_secretsmanager_secret" "test_db_password_secret" {
 resource "aws_secretsmanager_secret_version" "test_db_password_version" {
   secret_id = aws_secretsmanager_secret.test_db_password_secret.id
   secret_string = jsonencode({
-    username = "test-admin"
+    username = "test_admin"
     password = random_password.test_db_master_password.result
   })
 }
@@ -48,7 +48,7 @@ resource "aws_db_instance" "test_rds_instance" {
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
   storage_encrypted      = true
-  username               = "test-admin"
+  username               = "test_admin"
   password               = random_password.test_db_master_password.result
   publicly_accessible    = false
   skip_final_snapshot    = true
