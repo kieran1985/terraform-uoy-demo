@@ -47,7 +47,7 @@ jobs:
       - name: terraform validate
         run: terraform validate
 
-      - name: terraform plans
+      - name: terraform plan
         id: plan
         run: terraform plan -no-color -out=tfplan > plan.txt || true
         if: github.event_name == 'pull_request'
