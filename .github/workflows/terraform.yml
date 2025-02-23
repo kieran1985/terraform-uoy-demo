@@ -48,11 +48,9 @@ jobs:
         run: terraform validate
 
       - name: terraform plan
-        id: plan
-        run: terraform plan -no-color -out=tfplan > plan.txt || true
-        if: github.event_name == 'pull_request'
+        run: terraform plan -out=tfplan > plan.txt || true
 
-      - name: format plan output for PR comment
+      - name: Format Plan Output for PR Comment
         run: |
           echo '```terraform' > plan_comment.txt
           cat plan.txt >> plan_comment.txt
