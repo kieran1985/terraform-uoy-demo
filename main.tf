@@ -15,7 +15,7 @@ resource "aws_s3_bucket_ownership_controls" "test-bucket-ownership" {
 
 resource "aws_s3_bucket_acl" "test-bucket-acl" {
   depends_on = [aws_s3_bucket_ownership_controls.test-bucket-ownership]
-  
+
   bucket = aws_s3_bucket.test-bucket.id
   acl    = "private"
 }
@@ -37,7 +37,7 @@ resource "aws_s3_bucket_ownership_controls" "test-bucket-2-ownership" {
 
 resource "aws_s3_bucket_acl" "test-bucket-2-acl" {
   depends_on = [aws_s3_bucket_ownership_controls.test-bucket-2-ownership]
-  
+
   bucket = aws_s3_bucket.test-bucket-2.id
   acl    = "private"
 }
