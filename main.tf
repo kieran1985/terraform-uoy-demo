@@ -1,6 +1,6 @@
 // TEST BUCKET 1
 resource "aws_s3_bucket" "test-bucket" {
-  bucket = "test-interview-bucket-s9d3d5x9"
+  bucket = "test-interview-bucket-f3m7x1l3"
   tags = {
     name = "test-bucket"
   }
