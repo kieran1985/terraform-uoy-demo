@@ -1,0 +1,69 @@
+name: terraform
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  id-token: write # required for OIDC
+  contents: read # required for actions/checkout
+  pull-requests: write # required to write pull requests
+
+jobs:
+  terraform:
+    name: terraform install, init, plan, comment, apply
+    runs-on: ubuntu-latest
+
+    env:
+      TF_LOG: INFO
+      TF_IN_AUTOMATION: true
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_NUMBER}}:role/github-actions-terraform-uoy
+          role-session-name: GitHubActions
+          aws-region: eu-west-2
+
+      - name: verify authentication
+        run: aws sts get-caller-identity
+
+      - name: terraform install
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: terraform format
+        run: terraform fmt -check
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform validate
+        run: terraform validate
+
+      - name: terraform plan
+        id: plan
+        run: terraform plan -no-color -out=tfplan > plan.txt || true
+        if: github.event_name == 'pull_request'
+
+      - name: format plan output for PR comment
+        run: |
+          echo '```terraform' > plan_comment.txt
+          cat plan.txt >> plan_comment.txt
+          echo '```' >> plan_comment.txt
+
+      - name: Comment on Pull Request
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-path: plan_comment.txt
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: terraform apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
