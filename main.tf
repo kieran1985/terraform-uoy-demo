@@ -48,7 +48,7 @@ resource "aws_db_instance" "test_rds_instance" {
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
   storage_encrypted      = true
-  username               = "admin"
+  username               = "test-admin"
   password               = random_password.test_db_master_password.result
   publicly_accessible    = false
   skip_final_snapshot    = true
