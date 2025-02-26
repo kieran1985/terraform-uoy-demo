@@ -1,25 +1,3 @@
-// TEST BUCKET 1
-resource "aws_s3_bucket" "test-bucket" {
-  bucket = "test-interview-bucket-f3m7x1l3"
-  tags = {
-    name = "test-bucket"
-  }
-}
-
-resource "aws_s3_bucket_ownership_controls" "test-bucket-ownership" {
-  bucket = aws_s3_bucket.test-bucket.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_acl" "test-bucket-acl" {
-  depends_on = [aws_s3_bucket_ownership_controls.test-bucket-ownership]
-
-  bucket = aws_s3_bucket.test-bucket.id
-  acl    = "private"
-}
-
 // RDS INSTANCE
 
 resource "random_password" "test_db_master_password" {
